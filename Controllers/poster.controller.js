@@ -14,7 +14,6 @@ PosterModel.belongsToMany(GenreModel, {
 	as: 'genres',
 	foreignKey: 'poster_id',
 	timestamps: false
-
 })
 
 /**
@@ -30,14 +29,13 @@ class PosterController {
 	list = async (req, res) => {
 		// Destructure Assignment - optional list management
 		let { sortkey, sortdir, limit, attributes, genre } = req.query
-		console.log(req.query);
 		// Sætter array til sort og retning	
 		const order = [sortkey ? sortkey : 'id']
 		order.push(sortdir || 'ASC')
 		// Sætter limit antal
 		limit = parseInt(limit) || 1000
 		// Sætter attributter (table felter)
-		const attr = attributes ? attributes.split(',') : new Array('id', 'name')
+		const attr = attributes ? attributes.split(',') : new Array('id', 'name', 'image')
 
 		// Eksekverer sequelize metode med management values
 		const result = await PosterModel.findAll({
@@ -47,9 +45,9 @@ class PosterController {
 			include: {
 				model: GenreModel,
 				as: 'genres',
-				attributes: ['id', 'title']
+				attributes: ['id', 'title'],
+				where: (genre) ? { slug: genre } : null
 			}
-
 		})
 		// Udskriver resultat i json format
 		res.json(result)

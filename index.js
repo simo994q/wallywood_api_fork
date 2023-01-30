@@ -1,9 +1,11 @@
 import express from 'express';
 import UserRouter from './Routes/user.router.js';
+import OrgRouter from './Routes/org.router.js';
 import AuthRouter from './Routes/authenticate.router.js';
 import InitRouter from './Routes/init.router.js';
 import PosterRouter from './Routes/poster.router.js';
 import GenreRouter from './Routes/genre.router.js';
+import CartRouter from './Routes/cart.router.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,8 +28,10 @@ app.use(express.json())
 app.use(InitRouter);
 app.use(AuthRouter);
 app.use(UserRouter);
+app.use(OrgRouter);
 app.use(PosterRouter);
 app.use(GenreRouter);
+app.use(CartRouter);
 
 app.listen(port, () => {
 	console.log(`Server kører på port http://localhost:${port}`);

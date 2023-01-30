@@ -5,6 +5,7 @@ const InitRouter = express.Router()
 import UserModel from '../Models/user.model.js'
 import PosterModel from '../Models/poster.model.js'
 import GenreModel from '../Models/genre.model.js'
+import CartModel from '../Models/cart.model.js'
 
 InitRouter.get('/init', (request, response) => {
 	try {
