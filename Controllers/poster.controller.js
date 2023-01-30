@@ -29,7 +29,7 @@ class PosterController {
 	 */
 	list = async (req, res) => {
 		// Destructure Assignment - optional list management
-		let { sortkey, sortdir, limit, attributes } = req.query
+		let { sortkey, sortdir, limit, attributes, genre } = req.query
 		console.log(req.query);
 		// Sætter array til sort og retning	
 		const order = [sortkey ? sortkey : 'id']
