@@ -15,21 +15,14 @@ class UserController {
 	 * @param {Object} res Express Response Object
 	 */
 	list = async (req, res) => {
-		// Destructure Assignment - optional list management
-		let { sortkey, sortdir, limit, attributes } = req.query
-		// Sætter array til sort og retning
-		const order = [sortkey ? sortkey : 'id']
-		order.push(sortdir || 'ASC')
-		// Sætter limit antal
-		limit = parseInt(limit) || 1000
-		// Sætter attributter (table felter)
-		const attr = attributes ? attributes.split(',') : new Array('id', 'firstname', 'lastname')
+		// Indhenter parametre fra request objekt
+		const qp = QueryParamsHandle(req, 'id, firstname, lastname')
 
 		// Eksekverer sequelize metode med management values
 		const result = await UserModel.findAll({
-			attributes: attr,
-			order: [order],
-			limit: limit,
+			attributes: qp.attributes,
+			order: [qp.sort_key],
+			limit: qp.limit,
 			include: {
 				model: OrgModel,
 				attributes: ['id', 'title']

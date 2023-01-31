@@ -28,6 +28,7 @@ class PosterController {
 	 * @param {Object} res Express Response Object
 	 */
 	list = async (req, res) => {
+		// Indhenter parametre fra request objekt
 		const qp = QueryParamsHandle(req, 'id, name, image')
 
 		// Eksekverer sequelize metode med management values

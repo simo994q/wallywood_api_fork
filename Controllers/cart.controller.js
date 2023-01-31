@@ -47,7 +47,7 @@ class CartController {
 		}
 	}
 
-	update = async (req, res) => {
+	update = async (req, res) => {	
 		// Henter user id fra token
 		const user_id = decodeToken(req)		
 		// Destructure assignment af form data fra request body
