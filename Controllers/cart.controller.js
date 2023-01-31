@@ -1,5 +1,6 @@
 import CartModel from '../Models/cart.model.js'
 import PosterModel from '../Models/Poster.model.js'
+import decodeToken from '../Middleware/decodeToken.js'
 
 PosterModel.hasMany(CartModel)
 CartModel.belongsTo(PosterModel)
@@ -15,8 +16,9 @@ class CartController {
 	 * @param {Object} res Express Response Object
 	 */
 	list = async (req, res) => {
-		const { user_id } = req.query
-
+		// Henter user id fra token
+		const user_id = decodeToken(req)
+		// Henter all records i kurv ud fra user id
 		const result = await CartModel.findAll(
 			{ where: { user_id: user_id }}
 		)
@@ -30,6 +32,8 @@ class CartController {
 	 * @param {Object} res Express Response Object
 	 */
 	create = async (req, res) => {
+		// Henter user id fra token
+		req.body.user_id = decodeToken(req)
 		// Destructure assignment af form data fra request body
 		const { user_id, poster_id, quantity } = req.body;
 		// Tjekker felt data
@@ -44,15 +48,18 @@ class CartController {
 	}
 
 	update = async (req, res) => {
-		// Destructure assignment af id. 
-		const { id } = req.params || 0
+		// Henter user id fra token
+		const user_id = decodeToken(req)		
 		// Destructure assignment af form data fra request body
-		const { title, address, zipcode, city, country } = req.body;
+		const { poster_id, quantity } = req.body;
 		// Tjekker felt data
-		if(id && title && address && zipcode && city) {
+		if(user_id && poster_id && quantity) {
 			// Opretter record
 			const model = await CartModel.update(req.body, {
-				where: { id: id },
+				where: { 
+					poster_id: poster_id,
+					user_id: user_id 
+				},
 				individualHooks: true
 			})
 			// Sender nyt id som json object
@@ -71,9 +78,15 @@ class CartController {
 	 * @return {boolean} Returnerer true/false
 	 */	
 	remove = async (req, res) => {
+		// Henter user id fra token
+		const user_id = decodeToken(req)		
+
 		try {
 			await CartModel.destroy({ 
-				where: { id: req.params.id }
+				where: { 
+					id: req.params.id,
+					user_id: user_id
+				}
 			})
 			res.sendStatus(200)
 		}
