@@ -1,6 +1,7 @@
 import PosterModel from '../Models/Poster.model.js'
 import GenreModel from '../Models/Genre.model.js'
 import { sequelize } from '../Config/sequelize.config.js'
+import { QueryParamsHandle } from '../Middleware/Helpers.js'
 
 // Sætter modellers relationelle forhold - mange til mange
 GenreModel.belongsToMany(PosterModel, {
@@ -27,26 +28,18 @@ class PosterController {
 	 * @param {Object} res Express Response Object
 	 */
 	list = async (req, res) => {
-		// Destructure Assignment - optional list management
-		let { sortkey, sortdir, limit, attributes, genre } = req.query
-		// Sætter array til sort og retning	
-		const order = [sortkey ? sortkey : 'id']
-		order.push(sortdir || 'ASC')
-		// Sætter limit antal
-		limit = parseInt(limit) || 1000
-		// Sætter attributter (table felter)
-		const attr = attributes ? attributes.split(',') : new Array('id', 'name', 'image')
+		const qp = QueryParamsHandle(req, 'id, name, image')
 
 		// Eksekverer sequelize metode med management values
 		const result = await PosterModel.findAll({
-			attributes: attr,
-			order: [order],
-			limit: limit,
+			attributes: qp.attributes,
+			order: [qp.sort_key],
+			limit: qp.limit,
 			include: {
 				model: GenreModel,
 				as: 'genres',
 				attributes: ['id', 'title'],
-				where: (genre) ? { slug: genre } : null
+				where: (req.params.genre) ? { slug: req.params.genre } : null
 			}
 		})
 		// Udskriver resultat i json format
