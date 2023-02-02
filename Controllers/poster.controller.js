@@ -29,12 +29,12 @@ class PosterController {
 	 */
 	list = async (req, res) => {
 		// Indhenter parametre fra request objekt
-		const qp = QueryParamsHandle(req, 'id, name, image')
+		const qp = QueryParamsHandle(req, 'id, name, image, slug')
 
 		// Eksekverer sequelize metode med management values
 		const result = await PosterModel.findAll({
 			attributes: qp.attributes,
-			order: [qp.sort_key],
+			order: [qp.sortkey],
 			limit: qp.limit,
 			include: {
 				model: GenreModel,
@@ -54,12 +54,12 @@ class PosterController {
 	 */
 	details = async (req, res) => {
 		// Destructure assignment af id. 
-		const { id } = req.params || 0
+		const { slug } = req.params || 0
 		// Eksekverer sequelize metode med attributter og where clause
 		const result = await PosterModel.findOne({
 			attributes: ['id', 'name', 'slug', 'description', 'image', 'width', 
 						'height', 'price', 'stock', 'createdAt', 'updatedAt'],
-			where: { id: id },
+			where: { slug: slug },
 			include: {
 				model: GenreModel,
 				as: 'genres',
