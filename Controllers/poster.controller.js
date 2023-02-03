@@ -29,7 +29,7 @@ class PosterController {
 	 */
 	list = async (req, res) => {
 		// Indhenter parametre fra request objekt
-		const qp = QueryParamsHandle(req, 'id, name, image, slug')
+		const qp = QueryParamsHandle(req, 'id, name, image, slug, price')
 
 		// Eksekverer sequelize metode med management values
 		const result = await PosterModel.findAll({
