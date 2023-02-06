@@ -1,7 +1,7 @@
 import PosterModel from '../Models/Poster.model.js'
 import GenreModel from '../Models/Genre.model.js'
 import { sequelize } from '../Config/sequelize.config.js'
-import { QueryParamsHandle } from '../Middleware/Helpers.js'
+import { QueryParamsHandle, getPagination, getPagingData } from '../Middleware/Helpers.js'
 
 // Sætter modellers relationelle forhold - mange til mange
 GenreModel.belongsToMany(PosterModel, {
@@ -30,12 +30,16 @@ class PosterController {
 	list = async (req, res) => {
 		// Indhenter parametre fra request objekt
 		const qp = QueryParamsHandle(req, 'id, name, image, slug, price')
+		const { limit, offset } = getPagination(qp.page,qp.size)
+	
+		
 
 		// Eksekverer sequelize metode med management values
-		const result = await PosterModel.findAll({
+		const result = await PosterModel.findAndCountAll({
 			attributes: qp.attributes,
 			order: [qp.sortkey],
-			limit: qp.limit,
+			limit: limit,
+			offset: offset,
 			include: {
 				model: GenreModel,
 				as: 'genres',
@@ -44,7 +48,8 @@ class PosterController {
 			}
 		})
 		// Udskriver resultat i json format
-		res.json(result)
+		const response = getPagingData(result, qp.page, limit)
+		res.json(response)
 	}
 
 	/**
