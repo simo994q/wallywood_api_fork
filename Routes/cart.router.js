@@ -5,7 +5,7 @@ const CartRouter = express.Router()
 const controller = new CartController
 
 CartRouter.get('/cart', verifyToken, (req, res) => { controller.list(req, res) })
-CartRouter.post('/cart', verifyToken, (req, res) => { controller.create(req, res) })
+CartRouter.post('/cart', (req, res) => { controller.create(req, res) })
 CartRouter.put('/cart', verifyToken, (req, res) => { controller.update(req, res) })
 CartRouter.delete('/cart/:id([0-9]*)', verifyToken, (req, res) => { controller.remove(req, res) })
 

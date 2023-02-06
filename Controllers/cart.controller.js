@@ -18,6 +18,7 @@ class CartController {
 	list = async (req, res) => {
 		// Henter user id fra token
 		const user_id = decodeToken(req)
+		console.log(user_id);
 		// Henter all records i kurv ud fra user id
 		const result = await CartModel.findAll(
 			{ where: { user_id: user_id }}
@@ -33,11 +34,14 @@ class CartController {
 	 */
 	create = async (req, res) => {
 		// Henter user id fra token
-		req.body.user_id = decodeToken(req)
+		//req.body.user_id = decodeToken(req)
 		// Destructure assignment af form data fra request body
-		const { user_id, poster_id, quantity } = req.body;
+		const { poster_id, quantity } = req.body;
 		// Tjekker felt data
-		if(user_id && poster_id && quantity) {
+		if(poster_id && quantity) {
+			req.body.user_id = 1
+
+			console.log(req.body);
 			// Opretter record
 			const model = await CartModel.create(req.body)
 			// Sender nyt id som json object

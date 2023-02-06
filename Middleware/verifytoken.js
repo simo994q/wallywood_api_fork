@@ -9,6 +9,8 @@ dotenv.config()
  * @param {*} next Next Method - bruges til at sende en request videre med
  */
 const verifyToken = (req, res, next) => {
+	console.log(112)
+	console.log(req.headers);
 	// Henter authorization header
 	const bearerHeader = req.headers['authorization']
 	// Udskiller token fra Bearer string
