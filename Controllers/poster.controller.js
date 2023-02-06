@@ -1,7 +1,7 @@
 import PosterModel from '../Models/Poster.model.js'
 import GenreModel from '../Models/Genre.model.js'
 import { sequelize } from '../Config/sequelize.config.js'
-import { QueryParamsHandle, getPagination, getPagingData } from '../Middleware/Helpers.js'
+import { QueryParamsHandle } from '../Middleware/Helpers.js'
 
 // Sætter modellers relationelle forhold - mange til mange
 GenreModel.belongsToMany(PosterModel, {
@@ -29,17 +29,13 @@ class PosterController {
 	 */
 	list = async (req, res) => {
 		// Indhenter parametre fra request objekt
-		const qp = QueryParamsHandle(req, 'id, name, image, slug, price')
-		const { limit, offset } = getPagination(qp.page,qp.size)
-	
-		
+		const qp = QueryParamsHandle(req, 'id, name, image')
 
 		// Eksekverer sequelize metode med management values
-		const result = await PosterModel.findAndCountAll({
+		const result = await PosterModel.findAll({
 			attributes: qp.attributes,
-			order: [qp.sortkey],
-			limit: limit,
-			offset: offset,
+			order: [qp.sort_key],
+			limit: qp.limit,
 			include: {
 				model: GenreModel,
 				as: 'genres',
@@ -48,8 +44,7 @@ class PosterController {
 			}
 		})
 		// Udskriver resultat i json format
-		const response = getPagingData(result, qp.page, limit)
-		res.json(response)
+		res.json(result)
 	}
 
 	/**
@@ -59,12 +54,12 @@ class PosterController {
 	 */
 	details = async (req, res) => {
 		// Destructure assignment af id. 
-		const { slug } = req.params || 0
+		const { id } = req.params || 0
 		// Eksekverer sequelize metode med attributter og where clause
 		const result = await PosterModel.findOne({
 			attributes: ['id', 'name', 'slug', 'description', 'image', 'width', 
 						'height', 'price', 'stock', 'createdAt', 'updatedAt'],
-			where: { slug: slug },
+			where: { id: id },
 			include: {
 				model: GenreModel,
 				as: 'genres',
