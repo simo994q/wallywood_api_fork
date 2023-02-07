@@ -8,11 +8,10 @@ dotenv.config()
  * @param {*} res Response Object
  * @param {*} next Next Method - bruges til at sende en request videre med
  */
-const verifyToken = (req, res, next) => {
-	console.log(112)
-	console.log(req.headers);
+const verifyToken = async (req, res, next) => {
 	// Henter authorization header
-	const bearerHeader = req.headers['authorization']
+	const bearerHeader = await req.headers['authorization']
+	console.log(bearerHeader)
 	// Udskiller token fra Bearer string
 	const access_token = bearerHeader.substring(7)
 	// Verificerer token med jwt og private key

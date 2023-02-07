@@ -17,8 +17,8 @@ class CartController {
 	 */
 	list = async (req, res) => {
 		// Henter user id fra token
-		const user_id = decodeToken(req)
-		console.log(user_id);
+		const user_id = 1
+		//const user_id = decodeToken(req)
 		// Henter all records i kurv ud fra user id
 		const result = await CartModel.findAll(
 			{ where: { user_id: user_id }}
