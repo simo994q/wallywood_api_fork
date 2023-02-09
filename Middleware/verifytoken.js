@@ -11,7 +11,6 @@ dotenv.config()
 const verifyToken = async (req, res, next) => {
 	// Henter authorization header
 	const bearerHeader = await req.headers['authorization']
-	console.log(bearerHeader)
 	// Udskiller token fra Bearer string
 	const access_token = bearerHeader.substring(7)
 	// Verificerer token med jwt og private key

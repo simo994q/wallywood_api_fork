@@ -8,7 +8,7 @@ dotenv.config()
  * @param {Object} res Response Object
  * @param {Object} next Middleware Control Function
  */
-const decodeToken = (req) => {
+const decodeToken = (req, res) => {
 	// Henter bearer token fra authorization header
 	const bearerHeader = req.headers['authorization']
 	// Tjekker at bearer har en valid værdi

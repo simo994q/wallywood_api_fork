@@ -8,6 +8,7 @@ import InitRouter from './Routes/init.router.js';
 import PosterRouter from './Routes/poster.router.js';
 import GenreRouter from './Routes/genre.router.js';
 import CartRouter from './Routes/cart.router.js';
+import ContactRouter from './Routes/contact.router.js';
 
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use(CartRouter);
 app.use(OrgRouter);
 app.use(PosterRouter);
 app.use(GenreRouter);
+app.use(ContactRouter);
 
 // Server
 app.listen(port, () => {
