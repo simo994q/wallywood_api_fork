@@ -10,7 +10,7 @@ ContactModel.init({
 		allowNull: false,
 		primaryKey: true
 	},
-	navn: {
+	name: {
 		type: DataTypes.STRING,
 		allowNull: false
 	},

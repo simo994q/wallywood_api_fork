@@ -18,7 +18,7 @@ class AuthenticateController {
 		if(username && password) {
 			// Henter id og password fra bruger i user db
 			const userdata = await UserModel.findOne({
-				attributes: ['id','password'],
+				attributes: ['id','password','firstname', 'email', 'lastname'],
 				where: { email: username }
 			})
 
@@ -28,7 +28,12 @@ class AuthenticateController {
 					// Generer json web token hvis bruger er godkendt
 					const token = jwt.sign(userdata.id,process.env.PRIVATE_KEY)
 					// Returnerer token til browser
-					res.json({access_token: token})
+					res.json({
+						firstname: userdata.firstname,
+						lastname: userdata.lastname,
+						email: userdata.email,
+						access_token: token
+					})
 				} else {
 					// Sender status unauthorized
 					res.sendStatus(401)
