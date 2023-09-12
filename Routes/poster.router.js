@@ -10,7 +10,7 @@ const PosterRouter = express.Router();
 // Peger routes på metoder i controller
 PosterRouter.get('/poster/list', (req, res) => { controller.list(req,res) })
 PosterRouter.get('/poster/list/:genre([a-zA-Z-_]*)', (req, res) => { controller.list(req,res) })
-PosterRouter.get('/poster/details/:id([0-9]*)', (req, res) => { controller.details(req,res) })
+PosterRouter.get('/poster/details/:slug([a-zA-Z-_]*)', (req, res) => { controller.details(req,res) })
 PosterRouter.put('/poster/:id([0-9]*)', (req, res) => { controller.update(req,res) })
 PosterRouter.delete('/poster/:id([0-9]*)', (req, res) => { controller.delete(req,res) })
 
